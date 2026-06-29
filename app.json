@@ -1,0 +1,41 @@
+{
+  "expo": {
+    "name": "大师决斗统计",
+    "slug": "ygo-data",
+    "version": "1.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "scheme": "masterdueltracker",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.masterdueltracker.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#1a1a2e",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "package": "com.masterdueltracker.app",
+      "predictiveBackGestureEnabled": false,
+      "enableProguardInReleaseBuilds": true
+    },
+    "jsEngine": "hermes",
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-sqlite"
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "e4bca439-5074-47cd-94f3-410636604141"
+      }
+    },
+    "owner": "layneliu"
+  }
+}
