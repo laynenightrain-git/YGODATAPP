@@ -16,6 +16,23 @@ export interface CreateDeckInput {
   name: string;
 }
 
+// ==================== 对手卡组类型 ====================
+
+export interface OpponentDeck {
+  id: number;
+  name: string;
+  total_games: number;
+  wins: number;
+  created_at: string;
+}
+
+export interface OpponentDeckSummary {
+  opponentName: string;
+  totalGames: number;
+  wins: number;
+  winRate: number;
+}
+
 // ==================== 胜率记录类型 ====================
 
 export type RecordType = 'original' | 'modified';
@@ -59,6 +76,7 @@ export interface DuelRecord {
   opponent_deck: string;
   notes: string;
   duel_date: string;
+  disconnected: number; // 0 或 1
 }
 
 export interface CreateDuelInput {
@@ -66,8 +84,9 @@ export interface CreateDuelInput {
   coin_result: CoinResult;
   turn: Turn;
   result: DuelResult;
-  opponent_deck?: string;
+  opponent_deck: string; // 必填
   notes?: string;
+  disconnected?: boolean;
 }
 
 // ==================== 仪表盘统计类型 ====================
@@ -87,4 +106,25 @@ export interface DashboardStats {
   secondTurnWinRate: number;
   goingFirstWins: number;
   goingSecondWins: number;
+  // 新增：硬币胜负各自胜率
+  coinWinDuelWinRate: number;
+  coinLoseDuelWinRate: number;
+  coinWinWins: number;
+  coinLoseWins: number;
+  // 新增：掉线统计
+  disconnectCount: number;
+}
+
+// ==================== 按月统计 ====================
+
+export interface MonthlyStats {
+  year: number;
+  month: number;
+  totalDuels: number;
+  wins: number;
+  losses: number;
+  draws: number;
+  winRate: number;
+  coinWinRate: number;
+  disconnectCount: number;
 }

@@ -21,6 +21,14 @@ function initDatabase(db: SQLite.SQLiteDatabase): void {
       updated_at TEXT NOT NULL DEFAULT (datetime('now', 'localtime'))
     );
 
+    CREATE TABLE IF NOT EXISTS opponent_decks (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT UNIQUE NOT NULL,
+      total_games INTEGER NOT NULL DEFAULT 0,
+      wins INTEGER NOT NULL DEFAULT 0,
+      created_at TEXT NOT NULL DEFAULT (datetime('now', 'localtime'))
+    );
+
     CREATE TABLE IF NOT EXISTS deck_win_rate_records (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       deck_id INTEGER NOT NULL,
@@ -40,10 +48,14 @@ function initDatabase(db: SQLite.SQLiteDatabase): void {
       coin_result TEXT NOT NULL CHECK(coin_result IN ('win', 'lose')),
       turn TEXT NOT NULL CHECK(turn IN ('first', 'second')),
       result TEXT NOT NULL CHECK(result IN ('win', 'lose', 'draw')),
-      opponent_deck TEXT,
+      opponent_deck TEXT NOT NULL DEFAULT '',
       notes TEXT,
       duel_date TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
+      disconnected INTEGER NOT NULL DEFAULT 0,
       FOREIGN KEY (deck_id) REFERENCES decks(id) ON DELETE CASCADE
     );
+
+    -- 数据库迁移：为旧版添加缺失字段
+    ALTER TABLE duel_records ADD COLUMN disconnected INTEGER NOT NULL DEFAULT 0;
   `);
 }

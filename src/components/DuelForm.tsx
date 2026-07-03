@@ -160,16 +160,43 @@ export function DuelForm({
       </View>
 
       {/* 对手卡组 */}
-      <Text style={styles.label}>对手卡组（可选）</Text>
+      <Text style={styles.label}>对手卡组（必填）</Text>
       <TextInput
-        style={styles.textInput}
-        value={form.opponent_deck || ''}
-        onChangeText={(text) =>
-          onChangeForm({ opponent_deck: text || undefined })
-        }
-        placeholder="输入对手使用的卡组"
+        style={[
+          styles.textInput,
+          !form.opponent_deck.trim() && styles.textInputError,
+        ]}
+        value={form.opponent_deck}
+        onChangeText={(text) => onChangeForm({ opponent_deck: text })}
+        placeholder="请输入对手使用的卡组"
         placeholderTextColor={Colors.textSecondary}
       />
+      {!form.opponent_deck.trim() && (
+        <Text style={styles.errorHint}>请输入对手卡组</Text>
+      )}
+
+      {/* 掉线开关 */}
+      <View style={styles.disconnectRow}>
+        <TouchableOpacity
+          style={[
+            styles.disconnectCheckbox,
+            form.disconnected && styles.disconnectCheckboxActive,
+          ]}
+          onPress={() => onChangeForm({ disconnected: !form.disconnected })}
+          activeOpacity={0.7}
+        >
+          {form.disconnected && <Text style={styles.checkmark}>✓</Text>}
+        </TouchableOpacity>
+        <Text
+          style={[
+            styles.disconnectLabel,
+            form.disconnected && styles.disconnectLabelActive,
+          ]}
+          onPress={() => onChangeForm({ disconnected: !form.disconnected })}
+        >
+          掉线
+        </Text>
+      </View>
 
       {/* 备注 */}
       <Text style={styles.label}>备注（可选）</Text>
@@ -274,6 +301,47 @@ const styles = StyleSheet.create({
     padding: 12,
     fontSize: 15,
     color: Colors.text,
+  },
+  textInputError: {
+    borderColor: Colors.lose,
+  },
+  errorHint: {
+    fontSize: 12,
+    color: Colors.lose,
+    marginTop: 4,
+  },
+  disconnectRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 16,
+    gap: 8,
+  },
+  disconnectCheckbox: {
+    width: 22,
+    height: 22,
+    borderRadius: 4,
+    borderWidth: 2,
+    borderColor: Colors.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.cardBackground,
+  },
+  disconnectCheckboxActive: {
+    borderColor: Colors.lose,
+    backgroundColor: Colors.lose,
+  },
+  checkmark: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  disconnectLabel: {
+    fontSize: 15,
+    color: Colors.textSecondary,
+  },
+  disconnectLabelActive: {
+    color: Colors.lose,
+    fontWeight: '600',
   },
   textArea: {
     minHeight: 80,

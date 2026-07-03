@@ -5,6 +5,7 @@ import {
   FlatList,
   TouchableOpacity,
   StyleSheet,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -14,7 +15,7 @@ import { useDeckStore } from '../../src/stores/deckStore';
 import { DuelRecord } from '../../src/types';
 
 export default function DuelsScreen() {
-  const { duels, loading, loadDuels } = useDuelStore();
+  const { duels, loading, loadDuels, removeDuel } = useDuelStore();
   const { decks, loadDecks } = useDeckStore();
 
   useEffect(() => {
@@ -57,14 +58,47 @@ export default function DuelsScreen() {
     return turn === 'first' ? '先手' : '后手';
   };
 
+  const handleLongPress = (duel: DuelRecord) => {
+    Alert.alert(
+      '操作',
+      `${duel.duel_date} 的对局`,
+      [
+        { text: '取消', style: 'cancel' },
+        {
+          text: '删除',
+          style: 'destructive',
+          onPress: () => {
+            Alert.alert('确认', '确定删除这条对局记录？', [
+              { text: '取消', style: 'cancel' },
+              {
+                text: '删除',
+                style: 'destructive',
+                onPress: () => removeDuel(duel.id),
+              },
+            ]);
+          },
+        },
+      ]
+    );
+  };
+
   const renderItem = ({ item }: { item: DuelRecord }) => (
     <TouchableOpacity
       style={styles.duelCard}
       onPress={() => router.push(`/duel/${item.id}`)}
+      onLongPress={() => handleLongPress(item)}
       activeOpacity={0.7}
+      delayLongPress={500}
     >
       <View style={styles.duelHeader}>
-        <Text style={styles.duelDate}>{item.duel_date}</Text>
+        <View style={styles.duelHeaderLeft}>
+          <Text style={styles.duelDate}>{item.duel_date}</Text>
+          {item.disconnected === 1 && (
+            <View style={styles.disconnectBadge}>
+              <Text style={styles.disconnectBadgeText}>掉线</Text>
+            </View>
+          )}
+        </View>
         <View
           style={[
             styles.resultBadge,
@@ -189,6 +223,11 @@ const styles = StyleSheet.create({
     padding: 14,
     paddingBottom: 8,
   },
+  duelHeaderLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
   duelDate: {
     fontSize: 14,
     fontWeight: '600',
@@ -198,6 +237,17 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     paddingHorizontal: 10,
     paddingVertical: 4,
+  },
+  disconnectBadge: {
+    borderRadius: 4,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    backgroundColor: Colors.lose,
+  },
+  disconnectBadgeText: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: '#fff',
   },
   resultBadgeText: {
     fontSize: 12,
