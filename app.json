@@ -20,7 +20,8 @@
       },
       "package": "com.masterdueltracker.app",
       "predictiveBackGestureEnabled": false,
-      "enableProguardInReleaseBuilds": true
+      "enableProguardInReleaseBuilds": true,
+      "enableShrinkResourcesInReleaseBuilds": true
     },
     "jsEngine": "hermes",
     "web": {
@@ -33,9 +34,9 @@
         "expo-build-properties",
         {
           "android": {
-            "abiFilters": ["arm64-v8a"],
             "enableProguardInReleaseBuilds": true,
-            "enableShrinkResourcesInReleaseBuilds": true
+            "enableShrinkResourcesInReleaseBuilds": true,
+            "enableSeparateBuildPerCPUArchitecture": true
           }
         }
       ]
