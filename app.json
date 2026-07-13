@@ -34,9 +34,9 @@
         "expo-build-properties",
         {
           "android": {
+            "abiFilters": ["arm64-v8a"],
             "enableProguardInReleaseBuilds": true,
-            "enableShrinkResourcesInReleaseBuilds": true,
-            "enableSeparateBuildPerCPUArchitecture": true
+            "enableShrinkResourcesInReleaseBuilds": true
           }
         }
       ]
